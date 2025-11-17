@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import SearchBar from "./components/SearchBar";
 import CryptoList from "./components/CryptoList";
 import CryptoChart from "./components/CryptoChart";
+import ErrorBoundary from "./components/ErrorBoundary";
 
-export default function App() {
+function App() {
   const [selected, setSelected] = useState(null);
   const [query, setQuery] = useState("");
 
@@ -19,23 +20,33 @@ export default function App() {
 
       <SearchBar onSearch={q => setQuery(q)} />
 
-      <div style={{ display: "grid", gridTemplateColumns: "460px 1fr", gap: 18 }}>
-        <div style={{ border: "1px solid #eee", borderRadius: 8, padding: 12 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "460px 1fr", gap: 18, minHeight: "500px" }}>
+        <div style={{ border: "1px solid #eee", borderRadius: 8, padding: 12, backgroundColor: "#fafafa" }}>
           <h3 style={{ marginTop: 0 }}>Coins</h3>
           <CryptoList onSelect={id => setSelected(id)} searchQuery={query} />
         </div>
 
-        <div style={{ border: "1px solid #eee", borderRadius: 8, padding: 12 }}>
+        <div style={{ border: "1px solid #eee", borderRadius: 8, padding: 12, backgroundColor: "#fafafa" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <h3 style={{ margin: 0 }}>{selected ? selected.toUpperCase() : "Chart"}</h3>
             <div style={{ fontSize: 13, color: "#666" }}>{selected ? "USD" : ""}</div>
           </div>
 
-          <div style={{ marginTop: 12 }}>
-            <CryptoChart coinId={selected} days={1} pollIntervalMs={15000} />
+          <div style={{ marginTop: 12, minHeight: 420 }}>
+            {selected ? (
+              <ErrorBoundary>
+                <CryptoChart coinId={selected} />
+              </ErrorBoundary>
+            ) : (
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 420, color: "#999" }}>
+                Select a coin to view chart
+              </div>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+export default App;

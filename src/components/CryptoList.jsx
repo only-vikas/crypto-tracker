@@ -3,6 +3,9 @@ import React, { useEffect, useState, useMemo } from "react";
 import { fetchMarkets, searchCoins } from "../api/coingecko";
 import { loadWatchlist, toggleWatch } from "../utils/storage";
 
+
+
+
 export default function CryptoList({ onSelect, searchQuery }) {
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -58,9 +61,13 @@ export default function CryptoList({ onSelect, searchQuery }) {
     setWatchlist(updated);
   };
 
-  if (loading) return <div>Loading coins…</div>;
+  if (loading) return <div style={{ padding: 20, textAlign: "center", color: "#999" }}>Loading coins…</div>;
 
   const listToRender = filtered.length ? filtered : coins;
+
+  if (listToRender.length === 0) {
+    return <div style={{ padding: 20, textAlign: "center", color: "#999" }}>No coins found. Loading...</div>;
+  }
 
   return (
     <div style={{ overflowY: "auto", maxHeight: 420 }}>

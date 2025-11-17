@@ -1,6 +1,15 @@
 // src/components/SearchBar.jsx
-import React, { useState, useMemo } from "react";
-import debounce from "lodash.debounce";
+import React, { useState, useMemo, useCallback } from "react";
+
+// Simple debounce implementation
+function debounce(func, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
 
 export default function SearchBar({ onSearch }) {
   const [value, setValue] = useState("");
